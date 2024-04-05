@@ -12,14 +12,32 @@ public class TileGenerator : MonoBehaviour
     [SerializeField]
     private List<ScriptableTile> _tiles;
 
-    void Start()
+    [SerializeField]
+    private int _tileCount;
+
+    private void Start()
     {
         if (DependencyError()) return;
-        int totalTiles = 100;
-        SpawnTiles(totalTiles);
+        RegisterEvents();
     }
 
-    bool DependencyError()
+    private void RegisterEvents()
+    {
+        UITileCount.OnValueChanged += TileCountChanged;
+        UIStartButton.OnClicked += OnStartButtonClicked;
+    }
+
+    private void OnStartButtonClicked()
+    {
+        SpawnTiles(_tileCount);
+    }
+
+    private void TileCountChanged(int value)
+    {
+        _tileCount = value;
+    }
+
+    private bool DependencyError()
     {
         if (_tileOrigin == null)
         {
@@ -39,7 +57,7 @@ public class TileGenerator : MonoBehaviour
     private void SpawnTiles(int totalTiles)
     {
         Vector3 lastTilePosition = _tileOrigin.localPosition;
-        for (int i = 0, j = 0; i < totalTiles; i++, j++)
+        for (int i = 0; i < totalTiles; i++)
         {
             GameObject template = new GameObject();
             GameObject spawnedTile = Instantiate(template, transform);
@@ -54,7 +72,9 @@ public class TileGenerator : MonoBehaviour
             renderer.sprite = tile.TileSprite;
 
             spawnedTile.name = "Tile" + (i + 1);
-            spawnedTile.transform.localPosition = GetNextTilePosition(i, lastTilePosition, tile);
+
+            spawnedTile.transform.localPosition =
+                GetNextTilePosition(i, lastTilePosition, tile);
             lastTilePosition = spawnedTile.transform.localPosition;
         }
     }
@@ -83,8 +103,14 @@ public class TileGenerator : MonoBehaviour
         return pos;
     }
 
-    void Update()
+    private void UnregisterEvents()
     {
+        UITileCount.OnValueChanged -= TileCountChanged;
+        UIStartButton.OnClicked -= OnStartButtonClicked;
+    }
 
+    private void OnDestroy()
+    {
+        UnregisterEvents();
     }
 }
