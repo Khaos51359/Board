@@ -11,7 +11,7 @@ public class UIStartButton : MonoBehaviour
     private void Start()
     {
         _btn = GetComponent<Button>();
-        _btn.onClick.AddListener(delegate {OnStartButtonClicked();});
+        _btn.onClick.AddListener(delegate { OnStartButtonClicked(); });
     }
 
     private void OnStartButtonClicked()

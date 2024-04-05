@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileGenerator : MonoBehaviour
 {
+    public static event Action<Tile> OnTileSpawn;
     [SerializeField]
     private Transform _tileOrigin;
 
@@ -63,19 +65,23 @@ public class TileGenerator : MonoBehaviour
             GameObject spawnedTile = Instantiate(template, transform);
             Destroy(template);
 
-            ScriptableTile tile = _tiles[Random.Range(0, _tiles.Count - 1)];
-            Vector3 size = new Vector3(tile.TileWidth, tile.TileHeight, 1);
+            Tile tile = spawnedTile.AddComponent<Tile>();
+            tile.ID = i;
+
+            ScriptableTile tileSO = _tiles[UnityEngine.Random.Range(0, _tiles.Count - 1)];
+            Vector3 size = new Vector3(tileSO.TileWidth, tileSO.TileHeight, 1);
             spawnedTile.transform.localScale = size;
 
             SpriteRenderer renderer = spawnedTile.AddComponent<SpriteRenderer>();
-            renderer.color = tile.TileColor;
-            renderer.sprite = tile.TileSprite;
+            renderer.color = tileSO.TileColor;
+            renderer.sprite = tileSO.TileSprite;
 
             spawnedTile.name = "Tile" + (i + 1);
 
             spawnedTile.transform.localPosition =
-                GetNextTilePosition(i, lastTilePosition, tile);
+                GetNextTilePosition(i, lastTilePosition, tileSO);
             lastTilePosition = spawnedTile.transform.localPosition;
+            OnTileSpawn?.Invoke(tile);
         }
     }
 
