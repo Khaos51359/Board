@@ -7,8 +7,10 @@ public class ScriptableTile : ScriptableObject
     public Sprite TileSprite;
     public float TileWidth;
     public float TileHeight;
+
     [HideInInspector]
     public Transform TileTransform;
+
     [HideInInspector]
     public Direction TileDirection;
 
