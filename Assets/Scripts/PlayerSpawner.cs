@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class PlayerSpawner : MonoBehaviour
+[System.Serializable]
+public class PlayerSpawner
 {
-    [SerializeField]
-    private Player _playerPrefab;
+    private int _test;
+    public Player _playerPrefab;
 
-    [SerializeField]
-    private Transform _spawnPoint;
+    public Transform _spawnPoint;
 
     public int PlayerCount { get; private set;}
 
@@ -18,7 +18,6 @@ public class PlayerSpawner : MonoBehaviour
     private void Start()
     {
         if (DependenciesError()) return;
-        RegisterEvents();
     }
 
     private bool DependenciesError()
@@ -52,7 +51,8 @@ public class PlayerSpawner : MonoBehaviour
     {
         for (int i = 0; i < PlayerCount; i++)
         {
-            Player spawnedPlayer = Instantiate(_playerPrefab);
+
+            Player spawnedPlayer = GameObject.Instantiate(_playerPrefab);
             spawnedPlayer.ID = i;
             spawnedPlayer.Move(_spawnPoint);
         }
@@ -66,6 +66,5 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        UnregisterEvents();
     }
 }

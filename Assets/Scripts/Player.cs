@@ -24,13 +24,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        OnPlayerSpawned?.Invoke(this);
-    }
-
-    public Player()
-    {
         Diamond = 0;
         CurrentStep = 0;
+        OnPlayerSpawned?.Invoke(this);
     }
 
     public void AddDiamond(int value)
