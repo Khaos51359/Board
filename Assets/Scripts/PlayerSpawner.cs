@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -27,23 +28,27 @@ public class PlayerSpawner
         return false;
     }
 
-    public bool SpawnPlayer(int playerCount, out string errorMessage)
+    public Dictionary<int, Player> SpawnPlayer(int playerCount, out bool spawnSuccess, out string errorMessage)
     {
+        Dictionary<int, Player> playerDict = new Dictionary<int, Player>();
         string message;
         if (DependenciesError(out message))
         {
             errorMessage = message;
-            return false;
+            spawnSuccess = false;
+            return playerDict;
         }
         for (int i = 0; i < playerCount; i++)
         {
             Player spawnedPlayer = GameObject.Instantiate(_playerPrefab);
             spawnedPlayer.ID = i;
             spawnedPlayer.Move(_spawnPoint);
+            playerDict.Add(i, spawnedPlayer);
         }
 
         errorMessage = string.Empty;
-        return true;
+        spawnSuccess = true;
+        return playerDict;
     }
 
     private void OnDestroy()

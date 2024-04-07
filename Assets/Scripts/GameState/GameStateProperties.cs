@@ -14,9 +14,4 @@ public class GameStateProperties
         TotalPlayers = 0;
         PlayersDict = new Dictionary<int, Player>();
     }
-
-    public void Add(Player player)
-    {
-        PlayersDict.TryAdd(player.ID, player);
-    }
 }

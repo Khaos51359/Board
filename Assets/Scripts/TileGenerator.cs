@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileGenerator : MonoBehaviour
 {
-    public static event Action<Tile> OnTileSpawn;
     [SerializeField]
     private Transform _tileOrigin;
 
@@ -16,6 +14,11 @@ public class TileGenerator : MonoBehaviour
 
     [SerializeField]
     private int _tileCount;
+
+    private Dictionary<int, Tile> _tileDict = new Dictionary<int, Tile>();
+
+    [HideInInspector]
+    public Dictionary<int, Tile> TileDict => _tileDict;
 
     private void Start()
     {
@@ -81,7 +84,7 @@ public class TileGenerator : MonoBehaviour
             spawnedTile.transform.localPosition =
                 GetNextTilePosition(i, lastTilePosition, tileSO);
             lastTilePosition = spawnedTile.transform.localPosition;
-            OnTileSpawn?.Invoke(tile);
+            _tileDict.Add(i, tile);
         }
     }
 

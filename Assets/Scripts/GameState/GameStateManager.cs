@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    public static event Action<GameStateManager.State> OnGameSwitchState;
+    public static event Action<State> OnGameSwitchState;
+    public static event Action<int>  OnPlayerChanged;
 
     public GameStateProperties Properties = new GameStateProperties();
 
     public GameStateCanvases Canvases = new GameStateCanvases();
 
     public PlayerSpawner PlayerSpawnManager = new PlayerSpawner();
+
+    [HideInInspector]
+    public TileGenerator TileGeneratorManager;
 
     public enum State
     {
@@ -46,12 +50,21 @@ public class GameStateManager : MonoBehaviour
 
     private GameState _currentState = new GameStateMainMenu();
 
-    public void Start()
+    private void Start()
     {
         _currentState.Start(this);
+        TileGenerator[] tg = GameObject.FindObjectsOfType<TileGenerator>();
+        if (tg == null || tg.Length > 1)
+        {
+            string error = "[GameStateMainMenu] make sure there is one TileGenerator in the scene";
+            Debug.LogError(error);
+            SetState(GameStateManager.State.GameError, error);
+        }
+        TileGeneratorManager = tg[0];
+        InvokePlayerChanged(0);
     }
 
-    public void Update()
+    private void Update()
     {
         _currentState.Update();
 
@@ -61,7 +74,12 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public void OnDestroy()
+    public void InvokePlayerChanged(int playerID)
+    {
+        OnPlayerChanged?.Invoke(playerID);
+    }
+
+    private void OnDestroy()
     {
         _currentState.OnDestroy();
     }

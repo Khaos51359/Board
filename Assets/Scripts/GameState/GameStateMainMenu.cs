@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 public class GameStateMainMenu : GameState
 {
     public GameStateMainMenu()
@@ -25,21 +27,19 @@ public class GameStateMainMenu : GameState
 
     private void OnStartButtonClicked()
     {
-        TileGenerator tg = GameObject.FindObjectOfType<TileGenerator>();
-        if (tg == null)
-        {
-            string error = "[GameStateMainMenu] can't find TileGenerator in the scene";
-            Debug.LogError(error);
-            m_stateManager.SetState(GameStateManager.State.GameError, error);
-        }
+        int totalPlayers = m_stateManager.Properties.TotalPlayers;
+        Dictionary<int, Player> playerDict =
+            m_stateManager.PlayerSpawnManager.SpawnPlayer(
+                    totalPlayers, out bool spawnSuccess, out string message);
 
-
-        if (!m_stateManager.PlayerSpawnManager.SpawnPlayer(
-                    m_stateManager.Properties.TotalPlayers, out string message))
+        if (spawnSuccess == false)
         {
             Debug.LogError(message);
             m_stateManager.SetState(GameStateManager.State.GameError, message);
         }
+
+        m_stateManager.Properties.PlayersDict = playerDict;
+        m_stateManager.Properties.CurrentPlayer = playerDict[0];
 
         m_stateManager.SetState(GameStateManager.State.RollDice, string.Empty);
     }

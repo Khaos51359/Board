@@ -5,16 +5,21 @@ using TMPro;
 public class UICurrentPlayerDisplay : MonoBehaviour
 {
     private TextMeshProUGUI _text;
-    private GameplayManager _gameplayManager;
 
     private void Start()
     {
         _text = GetComponent<TextMeshProUGUI>();
-        GameplayManager.UINextPlayer += OnNextPlayer;
+        GameStateManager.OnPlayerChanged += OnNextPlayer;
+        OnNextPlayer(0);
     }
 
     private void OnNextPlayer(int currentPlayerIndex)
     {
         _text.text = "Player " + (currentPlayerIndex + 1) + "\'s turn";
+    }
+
+    private void OnDestroy()
+    {
+        GameStateManager.OnPlayerChanged -= OnNextPlayer;
     }
 }
