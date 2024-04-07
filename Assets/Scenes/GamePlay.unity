@@ -1514,7 +1514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Canvases:
     CanvasGameError: {fileID: 5223822454171796903, guid: 737a6754886c9e94eac3d0141f25e299, type: 3}
-  PlayerSpawnerManager:
+  PlayerSpawnManager:
     _playerPrefab: {fileID: 9028864091012332943, guid: 10fbaecef2bbb5447b6e68ff7b6acf88, type: 3}
     _spawnPoint: {fileID: 524878212}
 --- !u!4 &1029743098

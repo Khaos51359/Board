@@ -33,6 +33,14 @@ public class GameStateMainMenu : GameState
             m_stateManager.SetState(GameStateManager.State.GameError, error);
         }
 
+
+        if (!m_stateManager.PlayerSpawnManager.SpawnPlayer(
+                    m_stateManager.Properties.TotalPlayers, out string message))
+        {
+            Debug.LogError(message);
+            m_stateManager.SetState(GameStateManager.State.GameError, message);
+        }
+
         m_stateManager.SetState(GameStateManager.State.RollDice, string.Empty);
     }
 
@@ -43,7 +51,7 @@ public class GameStateMainMenu : GameState
 
     private void OnPlayerCountValueChanged(int value)
     {
-        m_stateManager.Properties.TotalTiles = value;
+        m_stateManager.Properties.TotalPlayers = value;
     }
 
     public override void Update()

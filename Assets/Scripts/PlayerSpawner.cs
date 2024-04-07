@@ -3,65 +3,47 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerSpawner
 {
-    private int _test;
     public Player _playerPrefab;
 
     public Transform _spawnPoint;
 
-    public int PlayerCount { get; private set;}
-
-    public PlayerSpawner()
-    {
-        PlayerCount = 0;
-    }
-
-    private void Start()
-    {
-        if (DependenciesError()) return;
-    }
-
-    private bool DependenciesError()
+    private bool DependenciesError(out string message)
     {
         if (_spawnPoint == null)
         {
-            Debug.LogError("[PlayerSpawner] spawn point not assigned");
+            message = "[PlayerSpawner] spawn point not assigned";
+            Debug.LogError(message);
             return true;
         }
 
         if (_playerPrefab == null)
         {
-            Debug.LogError("[PlayerSpawner] spawn prefab not assigned");
+            message = "[PlayerSpawner] spawn prefab not assigned";
+            Debug.LogError(message);
             return true;
         }
 
+        message = string.Empty;
         return false;
     }
 
-    private void RegisterEvents()
+    public bool SpawnPlayer(int playerCount, out string errorMessage)
     {
-        UIPlayerCount.OnUIPlayerCountChanged += OnPlayerCountChanged;
-        UIStartButton.OnClicked += OnStartGame;
-    }
-    private void OnPlayerCountChanged(int value)
-    {
-        PlayerCount = value;
-    }
-
-    private void OnStartGame()
-    {
-        for (int i = 0; i < PlayerCount; i++)
+        string message;
+        if (DependenciesError(out message))
         {
-
+            errorMessage = message;
+            return false;
+        }
+        for (int i = 0; i < playerCount; i++)
+        {
             Player spawnedPlayer = GameObject.Instantiate(_playerPrefab);
             spawnedPlayer.ID = i;
             spawnedPlayer.Move(_spawnPoint);
         }
-    }
 
-    private void UnregisterEvents()
-    {
-        UIPlayerCount.OnUIPlayerCountChanged -= OnPlayerCountChanged;
-        UIStartButton.OnClicked -= OnStartGame;
+        errorMessage = string.Empty;
+        return true;
     }
 
     private void OnDestroy()
