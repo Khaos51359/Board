@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 77626912}
-  - component: {fileID: 77626913}
   m_Layer: 0
   m_Name: Tiles
   m_TagString: Untagged
@@ -157,28 +156,6 @@ Transform:
   m_Father: {fileID: 1181539595}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 58.3, y: 0, z: 0}
---- !u!114 &77626913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77626911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 983429766fedfc9459134a984cb4da22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tileOrigin: {fileID: 2053545504}
-  _tileLayout:
-    Layout: 02000000020000000200000002000000020000000200000001000000010000000300000003000000030000000300000003000000010000000100000002000000020000000200000002000000020000000100000001000000030000000300000003000000030000000300000001000000010000000200000002000000020000000200000002000000
-  _tiles:
-  - {fileID: 11400000, guid: b6164588cda201446bd84437fc466b42, type: 2}
-  - {fileID: 11400000, guid: 02869e646ec75374284b62fb6c1a28a8, type: 2}
-  - {fileID: 11400000, guid: 8a20033873f9653428027f647f6190fc, type: 2}
-  - {fileID: 11400000, guid: 7039abaa3f76cd74d81b263633dee460, type: 2}
-  - {fileID: 11400000, guid: 4ddc3e651c2813c42875d8a6ee1c96d6, type: 2}
-  _tileCount: 0
 --- !u!1 &220725427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,6 +1494,17 @@ MonoBehaviour:
   PlayerSpawnManager:
     _playerPrefab: {fileID: 9028864091012332943, guid: 10fbaecef2bbb5447b6e68ff7b6acf88, type: 3}
     _spawnPoint: {fileID: 524878212}
+  TileGeneratorManager:
+    _tileOrigin: {fileID: 2053545504}
+    _tileParent: {fileID: 77626912}
+    _tileLayout:
+      Layout: 0200000002000000020000000200000002000000020000000200000001000000010000000300000003000000030000000300000003000000
+    _tiles:
+    - {fileID: 11400000, guid: b6164588cda201446bd84437fc466b42, type: 2}
+    - {fileID: 11400000, guid: 02869e646ec75374284b62fb6c1a28a8, type: 2}
+    - {fileID: 11400000, guid: 8a20033873f9653428027f647f6190fc, type: 2}
+    - {fileID: 11400000, guid: 7039abaa3f76cd74d81b263633dee460, type: 2}
+    - {fileID: 11400000, guid: 4ddc3e651c2813c42875d8a6ee1c96d6, type: 2}
 --- !u!4 &1029743098
 Transform:
   m_ObjectHideFlags: 0

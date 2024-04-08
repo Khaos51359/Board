@@ -27,21 +27,7 @@ public class GameStateMainMenu : GameState
 
     private void OnStartButtonClicked()
     {
-        int totalPlayers = m_stateManager.Properties.TotalPlayers;
-        Dictionary<int, Player> playerDict =
-            m_stateManager.PlayerSpawnManager.SpawnPlayer(
-                    totalPlayers, out bool spawnSuccess, out string message);
-
-        if (spawnSuccess == false)
-        {
-            Debug.LogError(message);
-            m_stateManager.SetState(GameStateManager.State.GameError, message);
-        }
-
-        m_stateManager.Properties.PlayersDict = playerDict;
-        m_stateManager.Properties.CurrentPlayer = playerDict[0];
-
-        m_stateManager.SetState(GameStateManager.State.RollDice, string.Empty);
+        m_stateManager.SetState(GameStateManager.State.SpawnAssets, string.Empty);
     }
 
     private void OnTileCountValueChanged(int value)

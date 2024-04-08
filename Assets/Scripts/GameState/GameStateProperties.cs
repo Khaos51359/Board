@@ -5,6 +5,7 @@ public class GameStateProperties
     public int TotalTiles;
     public int TotalPlayers;
     public Dictionary<int, Player> PlayersDict;
+    public Dictionary<int, Tile> TilesDict;
 
     public Player CurrentPlayer;
 

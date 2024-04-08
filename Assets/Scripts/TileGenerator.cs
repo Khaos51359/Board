@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileGenerator : MonoBehaviour
+[System.Serializable]
+public class TileGenerator
 {
     [SerializeField]
     private Transform _tileOrigin;
+
+    [SerializeField]
+    private Transform _tileParent;
 
     [SerializeField]
     private TileLayout _tileLayout;
@@ -12,34 +16,13 @@ public class TileGenerator : MonoBehaviour
     [SerializeField]
     private List<ScriptableTile> _tiles;
 
-    [SerializeField]
-    private int _tileCount;
-
-    private Dictionary<int, Tile> _tileDict = new Dictionary<int, Tile>();
-
-    [HideInInspector]
-    public Dictionary<int, Tile> TileDict => _tileDict;
-
-    private void Start()
+    public TileGenerator()
     {
-        if (DependencyError()) return;
-        RegisterEvents();
     }
 
-    private void RegisterEvents()
+    public void Start()
     {
-        UITileCount.OnValueChanged += TileCountChanged;
-        UIStartButton.OnClicked += OnStartButtonClicked;
-    }
-
-    private void OnStartButtonClicked()
-    {
-        SpawnTiles(_tileCount);
-    }
-
-    private void TileCountChanged(int value)
-    {
-        _tileCount = value;
+        DependencyError();
     }
 
     private bool DependencyError()
@@ -50,27 +33,53 @@ public class TileGenerator : MonoBehaviour
             return true;
         }
 
+        if (_tileParent == null)
+        {
+            Debug.LogError("[TileGenerator] Tiles parent transform not assigned");
+            return true;
+        }
+
         if (_tiles == null || _tiles.Count < 1)
         {
             Debug.LogError("[TileGenerator] there is no tile to generate, please assign some");
             return true;
         }
 
+        if (_tileLayout.Count < 1)
+        {
+            Debug.LogError("[TileGenerator] please assign some layout");
+            return true;
+        }
+
         return false;
     }
 
-    private void SpawnTiles(int totalTiles)
+    public Dictionary<int, Tile> SpawnTiles(int totalTiles, out Notifier notifier)
     {
+        Dictionary<int, Tile> spawnedTiles = new Dictionary<int, Tile>();
+        notifier = new Notifier();
         Vector3 lastTilePosition = _tileOrigin.localPosition;
         for (int i = 0; i < totalTiles; i++)
         {
+            if (_tileOrigin == null)
+            {
+                notifier.Status = false;
+                notifier.Message = "[TileGenerator] please assign transform parent for new tiles";
+                return spawnedTiles;
+            }
             GameObject template = new GameObject();
-            GameObject spawnedTile = Instantiate(template, transform);
-            Destroy(template);
+            GameObject spawnedTile = GameObject.Instantiate(template, _tileParent);
+            GameObject.Destroy(template);
 
             Tile tile = spawnedTile.AddComponent<Tile>();
             tile.ID = i;
 
+            if (_tiles == null)
+            {
+                notifier.Status = false;
+                notifier.Message = "[TileGenerator] please assign tiles variant";
+                return spawnedTiles;
+            }
             ScriptableTile tileSO = _tiles[UnityEngine.Random.Range(0, _tiles.Count - 1)];
             Vector3 size = new Vector3(tileSO.TileWidth, tileSO.TileHeight, 1);
             spawnedTile.transform.localScale = size;
@@ -84,8 +93,13 @@ public class TileGenerator : MonoBehaviour
             spawnedTile.transform.localPosition =
                 GetNextTilePosition(i, lastTilePosition, tileSO);
             lastTilePosition = spawnedTile.transform.localPosition;
-            _tileDict.Add(i, tile);
+            spawnedTiles.Add(i, tile);
         }
+
+        notifier.Status = true;
+        notifier.Message = string.Empty;
+
+        return spawnedTiles;
     }
 
     Vector3 GetNextTilePosition(int index, Vector3 lastTilePosition, ScriptableTile tile)
@@ -112,14 +126,7 @@ public class TileGenerator : MonoBehaviour
         return pos;
     }
 
-    private void UnregisterEvents()
-    {
-        UITileCount.OnValueChanged -= TileCountChanged;
-        UIStartButton.OnClicked -= OnStartButtonClicked;
-    }
-
     private void OnDestroy()
     {
-        UnregisterEvents();
     }
 }

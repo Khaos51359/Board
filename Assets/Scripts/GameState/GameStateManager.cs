@@ -12,12 +12,12 @@ public class GameStateManager : MonoBehaviour
 
     public PlayerSpawner PlayerSpawnManager = new PlayerSpawner();
 
-    [HideInInspector]
     public TileGenerator TileGeneratorManager;
 
     public enum State
     {
         MainMenu,
+        SpawnAssets,
         RollDice,
         PlayerMove,
         GameOver,
@@ -30,6 +30,9 @@ public class GameStateManager : MonoBehaviour
         {
             case State.MainMenu:
                 _currentState = new GameStateMainMenu(this);
+                break;
+            case State.SpawnAssets:
+                _currentState = new GameStateSpawnAssets(this);
                 break;
             case State.RollDice:
                 _currentState = new GameStateRollDice(this);
@@ -53,14 +56,6 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         _currentState.Start(this);
-        TileGenerator[] tg = GameObject.FindObjectsOfType<TileGenerator>();
-        if (tg == null || tg.Length > 1)
-        {
-            string error = "[GameStateMainMenu] make sure there is one TileGenerator in the scene";
-            Debug.LogError(error);
-            SetState(GameStateManager.State.GameError, error);
-        }
-        TileGeneratorManager = tg[0];
         InvokePlayerChanged(0);
     }
 
