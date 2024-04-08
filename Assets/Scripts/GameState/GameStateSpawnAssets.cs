@@ -31,6 +31,7 @@ public class GameStateSpawnAssets : GameState
             m_stateManager.SetState(GameStateManager.State.GameError, notifier.Message);
             return;
         }
+
         m_stateManager.Properties.TilesDict = tileDict;
     }
 

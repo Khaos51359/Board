@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Diamond = 0;
-        CurrentStep = 0;
+        CurrentStep = -1;
         OnPlayerSpawned?.Invoke(this);
     }
 

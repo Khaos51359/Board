@@ -10,7 +10,7 @@ public class UIRollDiceButton : MonoBehaviour
 
     public void Awake()
     {
-        Player.OnTurnFinished += OnPlayerTurnFinished;
+        GameStateManager.OnGameSwitchState += OnGameSwitchState;
     }
     public void Start()
     {
@@ -18,8 +18,9 @@ public class UIRollDiceButton : MonoBehaviour
         _btn.onClick.AddListener(delegate { OnRollDiceButtonClick(); });
     }
 
-    public void OnPlayerTurnFinished()
+    public void OnGameSwitchState(GameStateManager.State newState)
     {
+        if (newState != GameStateManager.State.RollDice) return;
         gameObject.SetActive(true);
     }
 
@@ -31,6 +32,6 @@ public class UIRollDiceButton : MonoBehaviour
 
     private void OnDestroy()
     {
-        Player.OnTurnFinished -= OnPlayerTurnFinished;
+        GameStateManager.OnGameSwitchState -= OnGameSwitchState;
     }
 }

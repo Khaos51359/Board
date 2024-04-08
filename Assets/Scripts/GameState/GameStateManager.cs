@@ -14,6 +14,7 @@ public class GameStateManager : MonoBehaviour
 
     public TileGenerator TileGeneratorManager;
 
+
     public enum State
     {
         MainMenu,
@@ -38,6 +39,7 @@ public class GameStateManager : MonoBehaviour
                 _currentState = new GameStateRollDice(this);
                 break;
             case State.PlayerMove:
+                _currentState = new GameStatePlayerMove(this);
                 break;
             case State.GameOver:
                 break;
