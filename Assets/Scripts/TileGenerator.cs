@@ -74,13 +74,15 @@ public class TileGenerator
             Tile tile = spawnedTile.AddComponent<Tile>();
             tile.ID = i;
 
+
             if (_tiles == null)
             {
                 notifier.Status = false;
                 notifier.Message = "[TileGenerator] please assign tiles variant";
                 return spawnedTiles;
             }
-            ScriptableTile tileSO = _tiles[UnityEngine.Random.Range(0, _tiles.Count - 1)];
+
+            ScriptableTile tileSO = _tiles[UnityEngine.Random.Range(0, _tiles.Count)];
             Vector3 size = new Vector3(tileSO.TileWidth, tileSO.TileHeight, 1);
             spawnedTile.transform.localScale = size;
 
@@ -93,6 +95,29 @@ public class TileGenerator
             spawnedTile.transform.localPosition =
                 GetNextTilePosition(i, lastTilePosition, tileSO);
             lastTilePosition = spawnedTile.transform.localPosition;
+
+            switch (tileSO.ActionType_)
+            {
+                case ScriptableTile.ActionType.Blue:
+                    tile.TileAction_ = new TileActionBlue();
+                    break;
+                case ScriptableTile.ActionType.Red:
+                    tile.TileAction_ = new TileActionRed();
+                    break;
+                case ScriptableTile.ActionType.Yellow:
+                    tile.TileAction_ = new TileActionYellow();
+                    break;
+                case ScriptableTile.ActionType.Orange:
+                    tile.TileAction_ = new TileActionOrange();
+                    break;
+                case ScriptableTile.ActionType.Green:
+                    tile.TileAction_ = new TileActionGreen();
+                    break;
+                default:
+                    tile.TileAction_ = new TileActionRed();
+                    break;;
+            }
+
             spawnedTiles.Add(i, tile);
         }
 

@@ -6,6 +6,7 @@ public class GameStatePlayerMove : GameState
     private Player _currentPlayer;
     private Dictionary<int, Tile> _spawnedTiles;
     private int _diceValue;
+    private Tile _lastTile;
 
     public GameStatePlayerMove(GameStateManager stateManager)
     {
@@ -22,24 +23,22 @@ public class GameStatePlayerMove : GameState
 
     private async void Execute()
     {
-        List<Tile> destinationTiles = DestionationsTiles();
+        List<Tile> destinationTiles = DestinationTiles();
         if (destinationTiles == null) return;
 
         foreach(Tile t in destinationTiles)
         {
+            _lastTile.RemovePlayer(_currentPlayer);
+
             await PlayerMovement(t);
+
+            t.AddPlayer(_currentPlayer);
+
+            _lastTile = t;
+            await Task.Delay(250);
         }
 
-        m_stateManager.Properties.CurrentPlayer = NextPlayer();
-        m_stateManager.SetState(GameStateManager.State.RollDice, string.Empty);
-    }
-
-    private Player NextPlayer()
-    {
-        int maxPlayerCount = m_stateManager.Properties.TotalPlayers;
-        int currentPlayerID = _currentPlayer.ID;
-        int nextPlayerIndex = (currentPlayerID + 1) % maxPlayerCount;
-        return m_stateManager.Properties.PlayersDict[nextPlayerIndex];
+        m_stateManager.SetState(GameStateManager.State.TileAction, string.Empty);
     }
 
     async Task<bool> PlayerMovement(Tile t)
@@ -49,7 +48,7 @@ public class GameStatePlayerMove : GameState
         return true;
     }
 
-    private List<Tile> DestionationsTiles()
+    private List<Tile> DestinationTiles()
     {
         List<Tile> destinationTiles = new List<Tile>();
 
@@ -79,11 +78,8 @@ public class GameStatePlayerMove : GameState
         _diceValue = m_stateManager.Properties.Dice;
         _currentPlayer = m_stateManager.Properties.CurrentPlayer;
         _spawnedTiles = m_stateManager.Properties.TilesDict;
-    }
-
-    private void Finished()
-    {
-        m_stateManager.SetState(GameStateManager.State.RollDice, string.Empty);
+        int currentStep = UnityEngine.Mathf.Clamp(_currentPlayer.CurrentStep, 0, int.MaxValue);
+        _lastTile = _spawnedTiles[currentStep];
     }
 
     public override void Update()

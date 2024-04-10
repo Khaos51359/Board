@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e98bed1f61d584293be5e53e7a070c, type: 3}
   m_Name: Tile5
   m_EditorClassIdentifier: 
-  TileColor: {r: 0.9450981, g: 0.30588236, b: 0.27450982, a: 0}
+  TileColor: {r: 0.9450981, g: 0.30588236, b: 0.27450982, a: 1}
   TileSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   TileWidth: 1
   TileHeight: 1
   TileTransform: {fileID: 0}
   TileDirection: 0
+  ActionType_: 3

@@ -14,6 +14,8 @@ public class ScriptableTile : ScriptableObject
     [HideInInspector]
     public Direction TileDirection;
 
+    public ActionType ActionType_;
+
     public enum Direction
     {
         x,
@@ -22,4 +24,14 @@ public class ScriptableTile : ScriptableObject
         y_,
     }
 
+    public enum ActionType
+    {
+        Blue,
+        Red,
+        Green,
+        Orange,
+        Yellow,
+    }
+
 }
+

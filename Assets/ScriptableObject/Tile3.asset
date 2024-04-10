@@ -18,3 +18,4 @@ MonoBehaviour:
   TileHeight: 1
   TileTransform: {fileID: 0}
   TileDirection: 0
+  ActionType_: 2

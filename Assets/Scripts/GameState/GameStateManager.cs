@@ -23,6 +23,7 @@ public class GameStateManager : MonoBehaviour
         PlayerMove,
         GameOver,
         GameError,
+        TileAction,
     }
 
     public void SetState(State newState, string message)
@@ -40,6 +41,9 @@ public class GameStateManager : MonoBehaviour
                 break;
             case State.PlayerMove:
                 _currentState = new GameStatePlayerMove(this);
+                break;
+            case State.TileAction:
+                _currentState = new GameStateTileAction(this);
                 break;
             case State.GameOver:
                 break;

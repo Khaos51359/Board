@@ -1491,6 +1491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Canvases:
     CanvasGameError: {fileID: 5223822454171796903, guid: 737a6754886c9e94eac3d0141f25e299, type: 3}
+    CanvasInsertNiceThing: {fileID: 4409115545547161404, guid: c9bec70e33c33f04bb35cbcd592e4060, type: 3}
   PlayerSpawnManager:
     _playerPrefab: {fileID: 9028864091012332943, guid: 10fbaecef2bbb5447b6e68ff7b6acf88, type: 3}
     _spawnPoint: {fileID: 524878212}
